@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RM Trufados - Confeitaria Artesanal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pink-bg: #fde2e4;
+            --pink-dark: #c94a6e;
+            --chocolate: #4a2810;
+            --turquois-1: #4ca6a4;
+            --turquois-2: #dbf1f1;
+            --white: #ffffff;
+            --gray-light: #f8f9fa;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        body {
+            background-color: var(--pink-bg);
+            background-image: radial-gradient(rgba(255, 255, 255, 0.4) 15%, transparent 16%);
+            background-size: 20px 20px;
+            color: var(--chocolate);
+            padding-bottom: 140px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px 20px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 100%);
+        }
+
+        .logo-placeholder {
+            width: 100px;
+            height: 100px;
+            background-color: var(--white);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            border: 3px double var(--pink-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Fredoka One', cursive;
+            color: var(--pink-dark);
+            font-size: 24px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .header h1 {
+            font-family: 'Fredoka One', cursive;
+            color: var(--pink-dark);
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .header .subtitle {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header .instagram {
+            display: inline-block;
+            background-color: var(--white);
+            padding: 6px 15px;
+            border-radius: 20px;
+            color: var(--pink-dark);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .tagline {
+            text-align: center;
+            font-style: italic;
+            margin: 10px 0 25px;
+            color: var(--pink-dark);
+            font-weight: 600;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 0 15px;
+            margin-bottom: 30px;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background-color: var(--white);
+            border: 2px solid var(--pink-dark);
+            color: var(--pink-dark);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .tab-btn.active {
+            background-color: var(--pink-dark);
+            color: var(--white);
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .category-section {
+            display: none;
+        }
+
+        .category-section.active {
+            display: block;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 450px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .product-card {
+            background-color: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.04);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .product-img-wrapper {
+            position: relative;
+            width: 100%;
+            padding-top: 75%;
+            background-color: #f5f5f5;
+        }
+
+        .img-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            background: linear-gradient(45deg, #ffe5ec, #ffc2d1);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .product-info {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-between;
+        }
+
+        .product-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .product-price {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--pink-dark);
+            margin-bottom: 12px;
+        }
+
+        .add-btn {
+            width: 100%;
+            background-color: var(--pink-dark);
+            color: var(--white);
+            border: none;
+            padding: 10px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .add-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .qty-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: var(--gray-light);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #ddd;
+            width: 100%;
+        }
+
+        .qty-btn {
+            background: none;
+            border: none;
+            width: 35px;
+            height: 35px;
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+            color: var(--pink-dark);
+        }
+
+        .qty-number {
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .trufa-summary-badge {
+            font-size: 11px;
+            background-color: #fff0f3;
+            border: 1px dashed var(--pink-dark);
+            padding: 4px 8px;
+            border-radius: 8px;
+            margin-top: 8px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .product-card.unavailable {
+            opacity: 0.6;
+        }
+
+        .unavailable-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3;
+        }
+
+        .unavailable-badge {
+            background-color: #dc3545;
+            color: white;
+            font-weight: 700;
+            padding: 5px 15px;
+            border-radius: 5px;
+            transform: rotate(-10deg);
+            font-size: 14px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 20;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            border-radius: 20px;
+            padding: 25px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--chocolate);
+            text-align: center;
+        }
+
+        .modal-size-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .modal-size-row:last-of-type {
+            border-bottom: none;
+            margin-bottom: 15px;
+        }
+
+        .size-info-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .size-name {
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .size-price {
+            font-size: 14px;
+            color: var(--pink-dark);
+            font-weight: 600;
+        }
+
+        .modal-qty-box {
+            width: 120px;
+        }
+
+        .modal-qty-box .qty-btn {
+            width: 30px;
+            height: 30px;
+        }
+
+        .close-modal {
+            width: 100%;
+            background-color: var(--pink-dark);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        /* Rodapé */
+        .footer-cart {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--white);
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+
+        .cart-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-info .total-price {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .send-order-btn {
+            background-color: #25d366;
+            color: var(--white);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .decorative-bar {
+            height: 16px;
+            background-image: linear-gradient(
+                90deg,
+                var(--turquois-1) 0%, var(--turquois-1) 50%,
+                var(--turquois-2) 50%, var(--turquois-2) 100%
+            );
+            background-size: 40px 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="logo-placeholder">RM</div>
+        <h1>Raquel Maria</h1>
+        <div class="subtitle">Trufados Confeitaria Artesanal</div>
+        <a href="https://instagram.com/raquel_mariaa" target="_blank" class="instagram">@raquel_mariaa</a>
+    </div>
+
+    <div class="tagline">"Difícil escolher um só!"</div>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('trufas')">Trufas Artesanais</button>
+        <button class="tab-btn" onclick="switchTab('cones')">Cones Trufados</button>
+        <button class="tab-btn" onclick="switchTab('potinhos')">Potinhos da Felicidade</button>
+    </div>
+
+    <div class="container">
+        <!-- SEÇÃO: TRUFAS -->
+        <div id="trufas" class="category-section active">
+            <div class="products-grid" id="grid-trufas"></div>
+        </div>
+
+        <!-- SEÇÃO: CONES TRUFADOS -->
+        <div id="cones" class="category-section">
+            <div class="products-grid" id="grid-cones"></div>
+        </div>
+
+        <!-- SEÇÃO: POTINHOS DA FELICIDADE -->
+        <div id="potinhos" class="category-section">
+            <div class="products-grid" id="grid-potinhos"></div>
+        </div>
+    </div>
+
+    <!-- Modal de Tamanhos -->
+    <div class="modal" id="sizeModal">
+        <div class="modal-content">
+            <div class="modal-title" id="modalFlavorTitle">Escolha as quantidades</div>
+            <div id="sizeOptionsContainer"></div>
+            <button class="close-modal" onclick="closeModal()">Confirmar Pedido</button>
+        </div>
+    </div>
+
+    <!-- Rodapé do Carrinho -->
+    <div class="footer-cart">
+        <div class="decorative-bar"></div>
+        <div class="cart-container">
+            <div class="cart-info">
+                <h4 id="cart-count">Nenhum item selecionado</h4>
+                <div class="total-price" id="cart-total">R$ 0,00</div>
+            </div>
+            <button class="send-order-btn" onclick="sendWhatsApp()">
+                Enviar Pedido
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Catálogo estruturado com imagens corrigidas e cones separados
+        const trufasSabores = [
+            { id: 't_brigadeiro', name: 'Brigadeiro', available: true, image: 'trufa-brigadeiro.jpg', emoji: '🍫' },
+            { id: 't_coco', name: 'Coco', available: true, image: 'trufa-coco.jpg', emoji: '🥥' },
+            { id: 't_ninho', name: 'Ninho c/ Nutella', available: true, image: 'trufa-ninho.jpg', emoji: '🥛' },
+            { id: 't_maracuja', name: 'Maracujá', available: true, image: 'trufa-maracuja.jpg', emoji: '💛' },
+            { id: 't_castanha', name: 'Castanha', available: false, image: 'trufa-castanha.jpg', emoji: '🌰' },
+            { id: 't_cupuacu', name: 'Cupuaçu', available: true, image: 'trufa-cupuacu.jpg', emoji: '🍈' },
+            { id: 't_morango', name: 'Morango Trufado', available: true, image: 'trufa-morango.jpg', emoji: '🍓' },
+            { id: 't_limao', name: 'Limão', available: true, image: 'trufa-limao.jpg', emoji: '🍋' },
+            { id: 't_cappuccino', name: 'Cappuccino', available: true, image: 'trufa-cappuccino.jpg', emoji: '☕' },
+            { id: 't_amendoim', name: 'Amendoim', available: true, image: 'trufa-amendoim.jpg', emoji: '🥜' }
+        ];
+
+        const trufaPrecos = { '25g': 2.50, '35g': 3.50, '50g': 4.00 };
+
+        const cones = [
+            { id: 'c_ferrero', name: 'Tipo Ferrero Rocher', price: 10.00, available: true, image: 'cone-ferrero.jpg', emoji: '🌰' },
+            { id: 'c_bombom_morango', name: 'Bombom de Morango', price: 12.00, available: true, image: 'cone-bombom-morango.jpg', emoji: '🍓' },
+            { id: 'c_morango_trufado', name: 'Morango Trufado', price: 12.00, available: true, image: 'cone-morango-trufado.jpg', emoji: '🍓' },
+            { id: 'c_oreo', name: 'Óreo', price: 10.00, available: true, image: 'cone-oreo.jpg', emoji: '🍪' },
+            { id: 'c_ouro_branco', name: 'Ouro Branco', price: 10.00, available: true, image: 'cone-ouro-branco.jpg', emoji: '🍬' },
+            { id: 'c_brigadeiro', name: 'Cone de Brigadeiro', price: 8.00, available: true, image: 'cone-brigadeiro.jpg', emoji: '🍫' },
+            { id: 'c_prestigio', name: 'Cone de Prestígio', price: 8.00, available: true, image: 'cone-prestigio.jpg', emoji: '🥥' }
+        ];
+
+        const potinhos = [
+            { id: 'p_uva_verde', name: 'Bombom de Uva Verde', price: 7.00, available: true, image: 'pote-uva-verde.jpg', emoji: '🍇' },
+            { id: 'p_uva_roxa', name: 'Bombom de Uva Roxa', price: 7.00, available: true, image: 'pote-uva-roxa.jpg', emoji: '🍇' },
+            { id: 'p_morango', name: 'Bombom de Morango', price: 7.00, available: true, image: 'pote-morango.jpg', emoji: '🍓' },
+            { id: 'p_oreo', name: 'Trufado de Óreo', price: 8.00, available: false, image: 'pote-oreo.jpg', emoji: '🍪' }
+        ];
+
+        let cart = {};
+        let currentFlavorIdForModal = null;
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.category-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        function renderTrufas() {
+            const grid = document.getElementById('grid-trufas');
+            grid.innerHTML = '';
+            trufasSabores.forEach(sabor => {
+                const card = document.createElement('div');
+                card.className = `product-card ${!sabor.available ? 'unavailable' : ''}`;
+                
+                let resumoTexto = '';
+                let totalSabor = 0;
+                Object.keys(trufaPrecos).forEach(tamanho => {
+                    const chaveItem = `${sabor.id}_${tamanho}`;
+                    if (cart[chaveItem] && cart[chaveItem].qty > 0) {
+                        resumoTexto += `${tamanho}: ${cart[chaveItem].qty}x | `;
+                        totalSabor += cart[chaveItem].qty;
+                    }
+                });
+
+                let botaoHTML = `<button class="add-btn" ${!sabor.available ? 'disabled' : ''} onclick="openSizeModal('${sabor.id}')">Adicionar</button>`;
+                if (totalSabor > 0) {
+                    botaoHTML = `<button class="add-btn" style="background-color: #a43352;" onclick="openSizeModal('${sabor.id}')">Ver/Editar (${totalSabor})</button>`;
+                }
+
+                card.innerHTML = `
+                    <div class="product-img-wrapper">
+                        <div class="img-placeholder" style="background-image: url('${sabor.image}');"></div>
+                        ${!sabor.available ? '<div class="unavailable-overlay"><span class="unavailable-badge">Indisponível</span></div>' : ''}
+                    </div>
+                    <div class="product-info">
+                        <div>
+                            <div class="product-title">Trufa de ${sabor.name}</div>
+                            <div class="product-price">R$ 2,50 a R$ 4,00</div>
+                        </div>
+                        <div class="order-controls">
+                            ${botaoHTML}
+                        </div>
+                        ${totalSabor > 0 ? `<div class="trufa-summary-badge">${resumoTexto.slice(0, -3)}</div>` : ''}
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function renderSimpleItems(items, gridId) {
+            const grid = document.getElementById(gridId);
+            grid.innerHTML = '';
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = `product-card ${!item.available ? 'unavailable' : ''}`;
+                const qty = cart[item.id] ? cart[item.id].qty : 0;
+                
+                let controlHTML = `<button class="add-btn" ${!item.available ? 'disabled' : ''} onclick="addSimpleItem('${item.id}', '${item.name}', ${item.price})">Adicionar</button>`;
+                
+                if (qty > 0) {
+                    controlHTML = `
+                        <div class="qty-controls">
+                            <button class="qty-btn" onclick="changeSimpleQty('${item.id}', -1)">-</button>
+                            <span class="qty-number">${qty}</span>
+                            <button class="qty-btn" onclick="changeSimpleQty('${item.id}', 1)">+</button>
+                        </div>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div class="product-img-wrapper">
+                        <div class="img-placeholder" style="background-image: url('${item.image}');"></div>
+                        ${!item.available ? '<div class="unavailable-overlay"><span class="unavailable-badge">Indisponível</span></div>' : ''}
+                    </div>
+                    <div class="product-info">
+                        <div>
+                            <div class="product-title">${item.name}</div>
+                            <div class="product-price">R$ ${item.price.toFixed(2).replace('.', ',')}</div>
+                        </div>
+                        <div class="order-controls">
+                            ${controlHTML}
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function addSimpleItem(id, name, price) {
+            if (!cart[id]) cart[id] = { name, price, qty: 0 };
+            cart[id].qty++;
+            updateCart();
+            renderSimpleItems(cones, 'grid-cones');
+            renderSimpleItems(potinhos, 'grid-potinhos');
+        }
+
+        function changeSimpleQty(id, delta) {
+            if (cart[id]) {
+                cart[id].qty += delta;
+                if (cart[id].qty <= 0) delete cart[id];
+                updateCart();
+                renderSimpleItems(cones, 'grid-cones');
+                renderSimpleItems(potinhos, 'grid-potinhos');
+            }
+        }
+
+        function openSizeModal(flavorId) {
+            currentFlavorIdForModal = flavorId;
+            const sabor = trufasSabores.find(s => s.id === flavorId);
+            document.getElementById('modalFlavorTitle').innerText = `Trufa de ${sabor.name}`;
+            updateModalUI();
+            document.getElementById('sizeModal').style.display = 'flex';
+        }
+
+        function updateModalUI() {
+            const container = document.getElementById('sizeOptionsContainer');
+            container.innerHTML = '';
+            const sabor = trufasSabores.find(s => s.id === currentFlavorIdForModal);
+
+            Object.keys(trufaPrecos).forEach(tamanho => {
+                const chaveItem = `${sabor.id}_${tamanho}`;
+                const qty = cart[chaveItem] ? cart[chaveItem].qty : 0;
+                const preco = trufaPrecos[tamanho];
+
+                const row = document.createElement('div');
+                row.className = 'modal-size-row';
+
+                let controleHTML = `<button class="add-btn" style="padding: 6px;" onclick="changeTrufaQty('${tamanho}', 1)">Adicionar</button>`;
+                if (qty > 0) {
+                    controleHTML = `
+                        <div class="qty-controls modal-qty-box">
+                            <button class="qty-btn" onclick="changeTrufaQty('${tamanho}', -1)">-</button>
+                            <span class="qty-number">${qty}</span>
+                            <button class="qty-btn" onclick="changeTrufaQty('${tamanho}', 1)">+</button>
+                        </div>
+                    `;
+                }
+
+                row.innerHTML = `
+                    <div class="size-info-text">
+                        <span class="size-name">Tamanho ${tamanho}</span>
+                        <span class="size-price">R$ ${preco.toFixed(2).replace('.', ',')}</span>
+                    </div>
+                    <div style="width: 120px;">
+                        ${controleHTML}
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        function changeTrufaQty(tamanho, delta) {
+            const sabor = trufasSabores.find(s => s.id === currentFlavorIdForModal);
+            const chaveItem = `${sabor.id}_${tamanho}`;
+            const preco = trufaPrecos[tamanho];
+
+            if (!cart[chaveItem]) {
+                cart[chaveItem] = { name: `Trufa de ${sabor.name} (${tamanho})`, price: preco, qty: 0 };
+            }
+
+            cart[chaveItem].qty += delta;
+            if (cart[chaveItem].qty <= 0) delete cart[chaveItem];
+
+            updateCart();
+            updateModalUI();
+        }
+
+        function closeModal() {
+            document.getElementById('sizeModal').style.display = 'none';
+            renderTrufas();
+        }
+
+        function updateCart() {
+            let total = 0;
+            let count = 0;
+            
+            Object.keys(cart).forEach(key => {
+                total += cart[key].price * cart[key].qty;
+                count += cart[key].qty;
+            });
+            
+            const countText = document.getElementById('cart-count');
+            const totalText = document.getElementById('cart-total');
+            
+            if (count === 0) {
+                countText.innerText = 'Nenhum item selecionado';
+                totalText.innerText = 'R$ 0,00';
+            } else {
+                countText.innerText = `${count} ${count === 1 ? 'item selecionado' : 'itens selecionados'}`;
+                totalText.innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+            }
+        }
+
+        function sendWhatsApp() {
+            let total = 0;
+            let texto = 'Olá Raquel! Gostaria de fazer o seguinte pedido:\n\n';
+            const keys = Object.keys(cart);
+            
+            if (keys.length === 0) {
+                alert('Seu carrinho está vazio! Selecione algum doce primeiro.');
+                return;
+            }
+            
+            keys.forEach(key => {
+                const item = cart[key];
+                const subtotal = item.price * item.qty;
+                total += subtotal;
+                texto += `• *${item.qty}x* ${item.name} - R$ ${subtotal.toFixed(2).replace('.', ',')}\n`;
+            });
+            
+            texto += `\n*Total do Pedido:* R$ ${total.toFixed(2).replace('.', ',')}`;
+            
+            const numeroTelefone = "5500000000000"; 
+            window.open(`https://api.whatsapp.com/send?phone=${numeroTelefone}&text=${encodeURIComponent(texto)}`, '_blank');
+        }
+
+        // Inicialização
+        renderTrufas();
+        renderSimpleItems(cones, 'grid-cones');
+        renderSimpleItems(potinhos, 'grid-potinhos');
+    </script>
+</body>
+</html>
